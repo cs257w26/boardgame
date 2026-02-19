@@ -17,6 +17,8 @@ static std::vector<int> star_points;
 static float piece_radius;
 static float click_threshold;
 static int status_y;
+static int window_width_px;
+static int status_font_size;
 
 // Background colors.
 static const Color kGridBg = {210, 180, 120, 255};
@@ -70,6 +72,8 @@ void InitMorrisBoard() {
   piece_radius = 20;
   click_threshold = 25;
   status_y = 660;
+  window_width_px = 700;
+  status_font_size = 20;
 
   InitWindow(700, 750, "Board Game");
   SetTargetFPS(60);
@@ -95,9 +99,15 @@ void InitGoBoard(int size) {
   int margin = cell_size + 10;
   int grid_pixels = (board_size - 1) * cell_size;
 
+  // Enforce a minimum window width so status text has room.
+  int natural_width = grid_pixels + margin * 2;
+  int min_width = 600;
+  int win_w = (natural_width < min_width) ? min_width : natural_width;
+  int x_offset = (win_w - natural_width) / 2;
+
   for (int row = 0; row < board_size; row++) {
     for (int col = 0; col < board_size; col++) {
-      float x = margin + col * cell_size;
+      float x = x_offset + margin + col * cell_size;
       float y = margin + row * cell_size;
       positions.push_back({x, y});
 
@@ -122,11 +132,14 @@ void InitGoBoard(int size) {
   piece_radius = cell_size * 0.43f;
   click_threshold = cell_size * 0.45f;
 
-  int window_width = grid_pixels + margin * 2;
-  int window_height = window_width + 50;
-  status_y = window_width + 15;
+  int board_bottom = margin + grid_pixels;
+  int status_area = 80;
+  int win_h = board_bottom + status_area;
+  status_y = board_bottom + 15;
+  window_width_px = win_w;
+  status_font_size = 20;
 
-  InitWindow(window_width, window_height, "Board Game");
+  InitWindow(win_w, win_h, "Board Game");
   SetTargetFPS(60);
   SetExitKey(0);
 }
@@ -196,8 +209,38 @@ void DrawTerritory(int position, int player) {
 }
 
 void DrawStatus(const std::string& text) {
-  int x = (board_type == kGrid) ? 80 : 100;
-  DrawText(text.c_str(), x, status_y, 20, DARKGRAY);
+  int x_pad = 20;
+  int max_width = window_width_px - x_pad * 2;
+  int line_height = status_font_size + 4;
+  int y = status_y;
+
+  // Word-wrap: break text into lines that fit within max_width.
+  std::string remaining = text;
+  while (!remaining.empty()) {
+    // Find how many characters fit on this line.
+    int fit = static_cast<int>(remaining.size());
+    while (fit > 0 && MeasureText(remaining.substr(0, fit).c_str(),
+                                   status_font_size) > max_width) {
+      // Back up to the previous space.
+      int space = static_cast<int>(remaining.rfind(' ', fit - 1));
+      if (space <= 0) {
+        fit--;
+      } else {
+        fit = space;
+      }
+    }
+    if (fit <= 0) fit = 1;
+
+    std::string line = remaining.substr(0, fit);
+    DrawText(line.c_str(), x_pad, y, status_font_size, DARKGRAY);
+    y += line_height;
+
+    // Skip past the line and any trailing space.
+    if (fit < static_cast<int>(remaining.size()) && remaining[fit] == ' ') {
+      fit++;
+    }
+    remaining = remaining.substr(fit);
+  }
 }
 
 int GetClickedPosition() {
