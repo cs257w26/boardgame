@@ -1,0 +1,56 @@
+# CS 257 C++ Style Guide - clang-format configuration
+# Based on Google C++ Style Guide
+
+BasedOnStyle: Google
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ColumnLimit: 80
+
+# Brace placement
+BreakBeforeBraces: Attach
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: Empty
+
+# Pointer/reference alignment (attach to type)
+PointerAlignment: Left
+ReferenceAlignment: Left
+DerivePointerAlignment: false
+
+# Include ordering
+IncludeBlocks: Regroup
+IncludeCategories:
+  # Project headers (quoted includes) come first
+  - Regex:           '^"'
+    Priority:        1
+  # System and library headers (angle brackets) come second
+  - Regex:           '^<'
+    Priority:        2
+SortIncludes: CaseSensitive
+
+# Other formatting
+SpaceAfterCStyleCast: false
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpacesInAngles: Never
+SpaceBeforeSquareBrackets: false
+
+# Line breaks
+AlwaysBreakAfterReturnType: None
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: true
+BinPackParameters: true
+BreakConstructorInitializers: BeforeColon
+
+# Access modifiers
+AccessModifierOffset: -1
+IndentAccessModifiers: false
+
+# Misc
+FixNamespaceComments: true
+NamespaceIndentation: None
+ReflowComments: true
