@@ -1,0 +1,36 @@
+# Doxyfile for Board Game project
+
+# Project information
+PROJECT_NAME           = "Board Game"
+PROJECT_BRIEF          = "Classic board games with Raylib rendering"
+PROJECT_NUMBER         =
+
+# Input configuration
+INPUT                  = src
+FILE_PATTERNS          = *.cpp *.hpp *.h
+RECURSIVE              = YES
+
+# Output configuration
+OUTPUT_DIRECTORY       = docs
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+
+# Documentation extraction
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = NO
+
+# Source browser
+SOURCE_BROWSER         = YES
+INLINE_SOURCES         = NO
+
+# Graph generation (if graphviz is available)
+HAVE_DOT               = NO
+
+# Warnings
+WARN_IF_UNDOCUMENTED   = YES
+WARN_IF_DOC_ERROR      = YES
+
+# Quiet mode
+QUIET                  = NO
+WARNINGS               = YES

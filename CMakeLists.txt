@@ -14,10 +14,21 @@ if (NOT raylib_FOUND)
 endif()
 
 # Board library (can be consumed by other projects via FetchContent)
-add_library(board_lib src/board.cpp)
+add_library(board_lib src/board.cpp src/menu.cpp)
 set_target_properties(board_lib PROPERTIES CXX_STANDARD 17)
 target_include_directories(board_lib PUBLIC src)
 target_link_libraries(board_lib PUBLIC raylib)
+
+# Doxygen documentation target
+find_package(Doxygen QUIET)
+if(DOXYGEN_FOUND)
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_SOURCE_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM
+    )
+endif()
 
 # Demo executable (uses main.cpp)
 add_executable(${PROJECT_NAME} src/main.cpp)

@@ -1,52 +1,117 @@
 #pragma once
 
+/**
+ * @file board.hpp
+ * @brief Board rendering library for classic board games.
+ *
+ * Provides Raylib-based rendering for Nine Men's Morris and Go boards,
+ * including drawing primitives for pieces, highlights, and territory markers.
+ */
+
 #include <string>
 
-// Player and cell constants.
-constexpr int kEmpty = 0;
-constexpr int kPlayer1 = 1;  // Black
-constexpr int kPlayer2 = 2;  // White
+/// @name Player Constants
+/// @{
+constexpr int kEmpty = 0;     ///< Empty cell
+constexpr int kPlayer1 = 1;   ///< Black player
+constexpr int kPlayer2 = 2;   ///< White player
+/// @}
 
-// Open a Morris board window with 24 positions arranged in three
-// concentric squares with cross connections.
+/**
+ * @brief Open a Morris board window.
+ *
+ * Creates a window with 24 positions arranged in three concentric squares
+ * with cross connections. The board uses a fixed layout optimized for
+ * Nine Men's Morris gameplay.
+ */
 void InitMorrisBoard();
 
-// Open a Go board window with a square grid of the given size.
-// Common sizes are 9, 13, and 19.
+/**
+ * @brief Open a Go board window with a square grid.
+ * @param size Grid size (common values: 9, 13, 19).
+ *
+ * Creates a window with a size x size grid. Star points are automatically
+ * placed according to standard Go conventions for the given board size.
+ */
 void InitGoBoard(int size);
 
-// Close the board window. Call once when the game ends.
+/**
+ * @brief Close the board window.
+ *
+ * Closes the Raylib window. Call once when the game ends or when
+ * transitioning back to the menu.
+ */
 void CloseBoard();
 
-// Returns true when the user closes the window.
+/**
+ * @brief Check if the user requested window close.
+ * @return true if the user clicked the window close button.
+ */
 bool ShouldClose();
 
-// Begin a new frame. Clears the screen and draws the board.
-// Call once per frame before any drawing.
+/**
+ * @brief Begin a new frame.
+ *
+ * Clears the screen and draws the board background and grid lines.
+ * Call once per frame before any drawing operations.
+ */
 void BeginFrame();
 
-// End the current frame and display it.
-// Call once per frame after all drawing.
+/**
+ * @brief End the current frame and display it.
+ *
+ * Flushes all drawing operations to the screen.
+ * Call once per frame after all drawing is complete.
+ */
 void EndFrame();
 
-// Draw a game piece at the given board position.
-// player should be kPlayer1 (black) or kPlayer2 (white).
+/**
+ * @brief Draw a game piece at a board position.
+ * @param position Board position index (0-23 for Morris, 0 to size*size-1 for Go).
+ * @param player Player constant (kPlayer1 for black, kPlayer2 for white).
+ */
 void DrawPiece(int position, int player);
 
-// Draw a highlight ring around a board position.
+/**
+ * @brief Draw a highlight ring around a board position.
+ * @param position Board position index to highlight.
+ *
+ * Draws a yellow ring around the position, useful for showing
+ * selected pieces or valid move targets.
+ */
 void DrawHighlight(int position);
 
-// Draw a small territory marker at an empty position.
+/**
+ * @brief Draw a territory marker at an empty position.
+ * @param position Board position index.
+ * @param player Player who owns the territory (kPlayer1 or kPlayer2).
+ *
+ * Draws a small square marker indicating territory ownership,
+ * typically used in Go for scoring display.
+ */
 void DrawTerritory(int position, int player);
 
-// Draw status text at the bottom of the window.
+/**
+ * @brief Draw status text at the bottom of the window.
+ * @param text Status message to display.
+ *
+ * Text is automatically word-wrapped to fit the window width.
+ */
 void DrawStatus(const std::string& text);
 
-// If the user clicked a board position this frame, returns its index.
-// Returns -1 if no position was clicked.
-// For the fixed layout, returns 0-23.
-// For grid boards, returns 0 to size*size - 1.
+/**
+ * @brief Get the board position clicked by the user.
+ * @return Position index if a valid position was clicked, -1 otherwise.
+ *
+ * For Morris boards, returns 0-23. For Go boards, returns 0 to size*size-1.
+ * Only detects clicks that occur within the click threshold of a position.
+ */
 int GetClickedPosition();
 
-// Returns true if the user pressed the P key this frame.
+/**
+ * @brief Check if the user pressed the pass key.
+ * @return true if the P key was pressed this frame.
+ *
+ * Used in Go to allow players to pass their turn.
+ */
 bool IsPassPressed();
