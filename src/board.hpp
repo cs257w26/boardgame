@@ -4,8 +4,8 @@
 
 // Player and cell constants.
 constexpr int kEmpty = 0;
-constexpr int kPlayer1 = 1;   // Black
-constexpr int kPlayer2 = 2;   // White
+constexpr int kPlayer1 = 1;  // Black
+constexpr int kPlayer2 = 2;  // White
 
 // Open a Morris board window with 24 positions arranged in three
 // concentric squares with cross connections.

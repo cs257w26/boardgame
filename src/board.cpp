@@ -1,9 +1,9 @@
 #include "board.hpp"
 
+#include "raylib.h"
+
 #include <utility>
 #include <vector>
-
-#include "raylib.h"
 
 // Board layout types.
 enum BoardType { kNone, kFixedLayout, kGrid };
@@ -25,22 +25,18 @@ static const Color kDotColor = {180, 165, 140, 255};
 
 // Screen positions for the 24-position fixed layout.
 static const Vector2 kFixedPositions[24] = {
-  {100, 100}, {350, 100}, {600, 100},
-  {183, 183}, {350, 183}, {517, 183},
-  {267, 267}, {350, 267}, {433, 267},
-  {100, 350}, {183, 350}, {267, 350},
-  {433, 350}, {517, 350}, {600, 350},
-  {267, 433}, {350, 433}, {433, 433},
-  {183, 517}, {350, 517}, {517, 517},
-  {100, 600}, {350, 600}, {600, 600},
+    {100, 100}, {350, 100}, {600, 100}, {183, 183}, {350, 183}, {517, 183},
+    {267, 267}, {350, 267}, {433, 267}, {100, 350}, {183, 350}, {267, 350},
+    {433, 350}, {517, 350}, {600, 350}, {267, 433}, {350, 433}, {433, 433},
+    {183, 517}, {350, 517}, {517, 517}, {100, 600}, {350, 600}, {600, 600},
 };
 
 // Line connections for the fixed layout.
 static const int kFixedLines[][2] = {
-  {0, 1}, {1, 2}, {2, 14}, {14, 23}, {23, 22}, {22, 21}, {21, 9}, {9, 0},
-  {3, 4}, {4, 5}, {5, 13}, {13, 20}, {20, 19}, {19, 18}, {18, 10}, {10, 3},
-  {6, 7}, {7, 8}, {8, 12}, {12, 17}, {17, 16}, {16, 15}, {15, 11}, {11, 6},
-  {1, 4}, {4, 7}, {12, 13}, {13, 14}, {16, 19}, {19, 22}, {9, 10}, {10, 11},
+    {0, 1}, {1, 2}, {2, 14},  {14, 23}, {23, 22}, {22, 21}, {21, 9},  {9, 0},
+    {3, 4}, {4, 5}, {5, 13},  {13, 20}, {20, 19}, {19, 18}, {18, 10}, {10, 3},
+    {6, 7}, {7, 8}, {8, 12},  {12, 17}, {17, 16}, {16, 15}, {15, 11}, {11, 6},
+    {1, 4}, {4, 7}, {12, 13}, {13, 14}, {16, 19}, {19, 22}, {9, 10},  {10, 11},
 };
 constexpr int kNumFixedLines = 32;
 
@@ -88,9 +84,13 @@ void InitGoBoard(int size) {
   star_points.clear();
 
   int cell_size;
-  if (size <= 9) cell_size = 60;
-  else if (size <= 13) cell_size = 45;
-  else cell_size = 34;
+  if (size <= 9) {
+    cell_size = 60;
+  } else if (size <= 13) {
+    cell_size = 45;
+  } else {
+    cell_size = 34;
+  }
 
   int margin = cell_size + 10;
   int grid_pixels = (board_size - 1) * cell_size;
@@ -201,12 +201,16 @@ void DrawStatus(const std::string& text) {
 }
 
 int GetClickedPosition() {
-  if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) return -1;
+  if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+    return -1;
+  }
   Vector2 mouse = GetMousePosition();
   for (int i = 0; i < static_cast<int>(positions.size()); i++) {
     float dx = mouse.x - positions[i].x;
     float dy = mouse.y - positions[i].y;
-    if (dx * dx + dy * dy < click_threshold * click_threshold) return i;
+    if (dx * dx + dy * dy < click_threshold * click_threshold) {
+      return i;
+    }
   }
   return -1;
 }
